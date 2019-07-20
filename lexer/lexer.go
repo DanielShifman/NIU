@@ -6,6 +6,7 @@ import (
 
 func (l *Lexer) NextToken() token.Token {
 	var tok token.Token
+	l.eatWhiteSpace()
 
 	switch l.ch {
 	case '=':
@@ -32,12 +33,20 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
+		} else if isDigit(l.ch) {
+			tok.Type = token.INT
+			tok.Literal = l.readNumber()
+			return tok
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
 		}
 	}
 	l.readChar()
 	return tok
+}
+
+func isDigit(ch byte) bool {
+	return ch >= '0' && ch <= '9'
 }
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {
@@ -50,10 +59,10 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 type Lexer struct {
-	input		 string
-	position 	 int  // Points to current char
+	input        string
+	position     int  // Points to current char
 	readPosition int  // Points to next char
-	ch			 byte // Current char
+	ch           byte // Current char
 }
 
 func New(input string) *Lexer {
@@ -65,11 +74,11 @@ func New(input string) *Lexer {
 
 func (l *Lexer) readChar() {
 	if l.readPosition >= len(l.input) {
-		l.ch = 0							// Sets EOF at EOF
+		l.ch = 0 // Sets EOF at EOF
 	} else {
-		l.ch = l.input[l.readPosition]      // Sets next char if not at EOF
+		l.ch = l.input[l.readPosition] // Sets next char if not at EOF
 	}
-	l.position = l.readPosition				// Increments position pointers
+	l.position = l.readPosition // Increments position pointers
 	l.readPosition++
 }
 
@@ -81,8 +90,22 @@ func (l *Lexer) readIdentifier() string {
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) eatWhiteSpace() {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+		l.readChar()
+	}
+}
+
+func (l *Lexer) readNumber() string {
+	position := l.position
+	for isDigit(l.ch) {
+		l.readChar()
+	}
+	return l.input[position:l.position]
+}
+
 func isIDLetter(ch byte) bool {
 	return ch >= 'a' && ch <= 'z' ||
-			ch <= 'A' && ch <= 'Z' ||
-			ch == '_' // Treated as letter for identifier purposes
+		ch >= 'A' && ch <= 'Z' ||
+		ch == '_' // Treated as letter for identifier purposes
 }
