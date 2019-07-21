@@ -1,2 +1,2 @@
 # Interpreter
-An interpreter for a still unnamed language, written in GO
+An interpreter for the NIU (NIU is Unnamed) language, written in GO.
