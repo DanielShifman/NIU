@@ -26,6 +26,8 @@ const (
 	GT       = ">"
 	EQ       = "=="
 	NEQ      = "!="
+	COLON    = ":"
+	TERNARY  = "?"
 
 	// Delimeters
 	COMMA     = ","
