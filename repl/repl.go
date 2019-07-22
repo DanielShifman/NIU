@@ -1,6 +1,7 @@
 package repl
 
 import (
+	"Interpreter/evaluator"
 	"Interpreter/lexer"
 	"Interpreter/parser"
 	"bufio"
@@ -26,7 +27,10 @@ func Start(in io.Reader, out io.Writer) {
 			printParserErrors(out, p.Errors())
 			continue
 		}
-		_, _ = io.WriteString(out, program.String()+"\n")
+		evaluated := evaluator.Eval(program)
+		if evaluated != nil {
+			_, _ = io.WriteString(out, evaluated.Inspect()+"\n")
+		}
 	}
 }
 
