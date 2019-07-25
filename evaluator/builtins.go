@@ -2,9 +2,13 @@ package evaluator
 
 import (
 	"Interpreter/object"
+	"fmt"
+	"unicode/utf8"
 )
 
 var builtins = map[string]*object.BuiltIn{
+	//ARRAY FUNCTIONS
+
 	"len": {
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
@@ -71,6 +75,17 @@ var builtins = map[string]*object.BuiltIn{
 			copy(newElements, arr.Elements)
 			newElements[length] = args[1]
 			return &object.Array{Elements: newElements}
+		},
+	},
+
+	// CONSOLE
+
+	"print": {
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+			return NUL
 		},
 	},
 }
