@@ -168,6 +168,38 @@ func (b *Boolean) String() string {
 	return b.Token.Literal
 }
 
+type StringLiteral struct {
+	Token token.Token // String token
+	Value string
+}
+
+func (sl *StringLiteral) expressionNode() {}
+func (sl *StringLiteral) TokenLiteral() string {
+	return sl.Token.Literal
+}
+func (sl *StringLiteral) String() string {
+	return sl.Token.Literal
+}
+
+type ArrayLiteral struct {
+	Token    token.Token // [ token
+	Elements []Expression
+}
+
+func (al *ArrayLiteral) expressionNode() {}
+func (al *ArrayLiteral) TokenLiteral() string {
+	return al.Token.Literal
+}
+func (al *ArrayLiteral) String() string {
+	var out bytes.Buffer
+	var elements []string
+	for _, el := range al.Elements {
+		elements = append(elements, el.String())
+	}
+	out.WriteString("[" + strings.Join(elements, ", ") + "]")
+	return out.String()
+}
+
 type IfExpression struct {
 	Token       token.Token // IF token
 	Condition   Expression
@@ -260,5 +292,21 @@ func (p *Program) String() string {
 	for _, s := range p.Statements {
 		out.WriteString(s.String())
 	}
+	return out.String()
+}
+
+type IndexExpression struct {
+	Token token.Token // [ token
+	Left  Expression
+	Index Expression
+}
+
+func (ie *IndexExpression) expressionNode() {}
+func (ie *IndexExpression) TokenLiteral() string {
+	return ie.Token.Literal
+}
+func (ie *IndexExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(" + ie.Left.String() + "[" + ie.Index.String() + "]")
 	return out.String()
 }

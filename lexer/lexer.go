@@ -41,6 +41,13 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.COLON, l.ch)
 	case '?':
 		tok = newToken(token.TERNARY, l.ch)
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
+	case '[':
+		tok = newToken(token.LBRACK, l.ch)
+	case ']':
+		tok = newToken(token.RBRACK, l.ch)
 	case 0:
 		tok.Literal = ""
 		tok.Type = token.EOF
@@ -145,4 +152,15 @@ func (l *Lexer) make2CharToken(defToken token.Token) token.Token {
 		}
 	}
 	return t
+}
+
+func (l *Lexer) readString() string {
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' {
+			break
+		}
+	}
+	return l.input[position:l.position]
 }

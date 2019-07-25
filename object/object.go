@@ -10,10 +10,13 @@ import (
 const (
 	INTEGER_OBJ      = "INTEGER"
 	BOOLEAN_OBJ      = "BOOLEAN"
+	STRING_OBJ       = "STRING"
 	NUL_OBJ          = "NUL"
 	RETURN_VALUE_OBJ = "RETURN VALUE"
 	ERROR_OBJ        = "ERROR"
 	FUNCTION_OBJ     = "FUNCTION"
+	BUILTIN_OBJ      = "BUILTIN"
+	ARRAY_OBJ        = "ARRAY"
 )
 
 type ObjectType string
@@ -43,6 +46,17 @@ func (b *Boolean) Inspect() string {
 }
 func (b *Boolean) Type() ObjectType {
 	return BOOLEAN_OBJ
+}
+
+type String struct {
+	Value string
+}
+
+func (s *String) Inspect() string {
+	return s.Value
+}
+func (s *String) Type() ObjectType {
+	return STRING_OBJ
 }
 
 type Nul struct{}
@@ -92,5 +106,34 @@ func (f *Function) Inspect() string {
 		params = append(params, p.String())
 	}
 	out.WriteString("fn(" + strings.Join(params, ", ") + ") " + f.Body.String())
+	return out.String()
+}
+
+type BuiltInFunction func(args ...Object) Object
+type BuiltIn struct {
+	Fn BuiltInFunction
+}
+
+func (b *BuiltIn) Type() ObjectType {
+	return BUILTIN_OBJ
+}
+func (b *BuiltIn) Inspect() string {
+	return "builtin function"
+}
+
+type Array struct {
+	Elements []Object
+}
+
+func (a *Array) Type() ObjectType {
+	return ARRAY_OBJ
+}
+func (a *Array) Inspect() string {
+	var out bytes.Buffer
+	var elements []string
+	for _, e := range a.Elements {
+		elements = append(elements, e.Inspect())
+	}
+	out.WriteString("[" + strings.Join(elements, ", ") + "]")
 	return out.String()
 }

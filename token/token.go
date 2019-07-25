@@ -12,8 +12,9 @@ const (
 	EOF     = "EOF"     // End of File
 
 	//Identifiers and Literals
-	IDENT = "IDENT" // add, foo, x, y, ...
-	INT   = "INT"   // 1, 23, 456
+	IDENT  = "IDENT" // add, foo, x, y, ...
+	INT    = "INT"   // 1, 23, 456
+	STRING = "STRING"
 
 	// Operators
 	ASSIGN   = "="
@@ -37,6 +38,8 @@ const (
 	RPAREN = ")"
 	LBRACE = "{"
 	RBRACE = "}"
+	LBRACK = "["
+	RBRACK = "]"
 
 	// Keywords
 	FUNCTION = "FUNCTION"
