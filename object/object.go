@@ -1,7 +1,10 @@
 package object
 
 import (
+	"Interpreter/ast"
+	"bytes"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -10,6 +13,7 @@ const (
 	NUL_OBJ          = "NUL"
 	RETURN_VALUE_OBJ = "RETURN VALUE"
 	ERROR_OBJ        = "ERROR"
+	FUNCTION_OBJ     = "FUNCTION"
 )
 
 type ObjectType string
@@ -70,4 +74,23 @@ func (e *Error) Type() ObjectType {
 }
 func (e *Error) Inspect() string {
 	return "ERROR: " + e.Message
+}
+
+type Function struct {
+	Parameters []*ast.Identifier
+	Body       *ast.BlockStatement
+	Env        *Environment
+}
+
+func (f *Function) Type() ObjectType {
+	return FUNCTION_OBJ
+}
+func (f *Function) Inspect() string {
+	var out bytes.Buffer
+	var params []string
+	for _, p := range f.Parameters {
+		params = append(params, p.String())
+	}
+	out.WriteString("fn(" + strings.Join(params, ", ") + ") " + f.Body.String())
+	return out.String()
 }
