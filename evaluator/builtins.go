@@ -3,7 +3,7 @@ package evaluator
 import (
 	"Interpreter/object"
 	"fmt"
-	"unicode/utf8"
+	"os"
 )
 
 var builtins = map[string]*object.BuiltIn{
@@ -85,6 +85,12 @@ var builtins = map[string]*object.BuiltIn{
 			for _, arg := range args {
 				fmt.Println(arg.Inspect())
 			}
+			return NUL
+		},
+	},
+	"exit": {
+		Fn: func(args ...object.Object) object.Object {
+			os.Exit(1)
 			return NUL
 		},
 	},

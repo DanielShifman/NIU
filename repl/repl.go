@@ -8,7 +8,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"os"
 )
 
 const PROMPT = ">> "
@@ -23,13 +22,12 @@ func Start(in io.Reader, out io.Writer) {
 			return
 		}
 		line := scanner.Text()
-		if line == "exit()" {
-			os.Exit(1)
-		}
+
 		l := lexer.New(line)
 		p := parser.New(l)
 		program := p.ParseProgram()
 		if len(p.Errors()) != 0 {
+
 			printParserErrors(out, p.Errors())
 			continue
 		}
