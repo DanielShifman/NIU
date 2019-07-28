@@ -57,9 +57,7 @@ func (l *Lexer) NextToken() token.Token {
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
 		} else if isDigit(l.ch) {
-			tok.Type = token.INT
-			tok.Literal = l.readNumber()
-			return tok
+			return l.readDigit()
 		} else {
 			tok = newToken(token.ILLEGAL, l.ch)
 		}
@@ -163,4 +161,14 @@ func (l *Lexer) readString() string {
 		}
 	}
 	return l.input[position:l.position]
+}
+
+func (l *Lexer) readDigit() token.Token {
+	i := l.readNumber()
+	if l.ch == '.' && isDigit(l.peekChar()) {
+		l.readChar()
+		fracPart := l.readNumber()
+		return token.Token{Type: token.DOUBLE, Literal: i + "." + fracPart}
+	}
+	return token.Token{Type: token.INT, Literal: i}
 }

@@ -34,6 +34,22 @@ func TestEvalIntegerExpression(t *testing.T) {
 	}
 }
 
+func TestEvalDoubleExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected float64
+	}{
+		{"3.14", 3.14},
+		{"2.71", 2.71},
+		{"-2.71", -2.71},
+		{"3.1 + 1.9", 5.0},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testDoubleObject(t, evaluated, tt.expected)
+	}
+}
+
 func TestEvalBooleanExpression(t *testing.T) {
 	tests := []struct {
 		input    string
@@ -96,7 +112,7 @@ func TestIfElseExpressions(t *testing.T) {
 		if ok {
 			testIntegerObject(t, evaluated, int64(integer))
 		} else {
-			testNulObject(t, evaluated)
+			testNulObject(evaluated)
 		}
 	}
 }
@@ -332,7 +348,7 @@ func TestArrayIndexExpressions(t *testing.T) {
 		if ok {
 			testIntegerObject(t, evaluated, int64(integer))
 		} else {
-			testNulObject(t, evaluated)
+			testNulObject(evaluated)
 		}
 	}
 }
@@ -391,7 +407,7 @@ func TestHashIndexExpressions(t *testing.T) {
 		if ok {
 			testIntegerObject(t, evaluated, int64(integer))
 		} else {
-			testNulObject(t, evaluated)
+			testNulObject(evaluated)
 		}
 	}
 }
@@ -417,6 +433,19 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	return true
 }
 
+func testDoubleObject(t *testing.T, obj object.Object, expected float64) bool {
+	result, ok := obj.(*object.Double)
+	if !ok {
+		t.Errorf("object is not Double. got=%T (%v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%f, want=%f", result.Value, expected)
+		return false
+	}
+	return true
+}
+
 func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 	result, ok := obj.(*object.Boolean)
 	if !ok {
@@ -430,6 +459,6 @@ func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 	return true
 }
 
-func testNulObject(t *testing.T, obj object.Object) bool {
+func testNulObject(obj object.Object) bool {
 	return obj == NUL
 }

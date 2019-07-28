@@ -12,9 +12,10 @@ const (
 	EOF     = "EOF"     // End of File
 
 	//Identifiers and Literals
-	IDENT  = "IDENT" // add, foo, x, y, ...
-	INT    = "INT"   // 1, 23, 456
-	STRING = "STRING"
+	IDENT  = "IDENT"  // add, foo, x, y, ...
+	INT    = "INT"    // 1, 23, 456
+	DOUBLE = "DOUBLE" // 1.67, 2.71, 3.14
+	STRING = "STRING" // "foo", "foobar"
 
 	// Operators
 	ASSIGN   = "="
