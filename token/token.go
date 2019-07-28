@@ -30,6 +30,7 @@ const (
 	NEQ      = "!="
 	COLON    = ":"
 	TERNARY  = "?"
+	MODULO   = "%"
 
 	// Delimeters
 	COMMA     = ","

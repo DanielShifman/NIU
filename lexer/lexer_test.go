@@ -28,6 +28,7 @@ if (5 < 10) {
 {"foo": "bar"}
 123;
 1.23;
+%
 `
 
 	tests := []struct {
@@ -124,6 +125,7 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.DOUBLE, "1.23"},
 		{token.SEMICOLON, ";"},
+		{token.MODULO, "%"},
 
 		{token.EOF, ""},
 	}

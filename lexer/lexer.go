@@ -41,6 +41,8 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.COLON, l.ch)
 	case '?':
 		tok = newToken(token.TERNARY, l.ch)
+	case '%':
+		tok = newToken(token.MODULO, l.ch)
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
